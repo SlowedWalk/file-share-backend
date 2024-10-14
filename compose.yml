@@ -1,0 +1,18 @@
+serivices:
+  database:
+    image: postgres:16
+    ports:
+      - '5432:5432'
+    environment:
+      - 'POSTGRES_USER=myuser'
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+  vault:
+    container_name: "guide-vault"
+    image: hashicorp/vault:latest
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "00000000-0000-0000-0000-000000000000"
+    ports:
+      - "8200:8200"
+  volumes:
+    - './data/postgres:/var/lib/postgresql/data'

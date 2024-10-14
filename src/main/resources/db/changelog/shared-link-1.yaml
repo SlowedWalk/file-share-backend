@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00000000000004-shared-link-seq
+      author: hidetora
+      changes:
+        - createSequence:
+            sequenceName: shared_link_sequence
+            startValue: 1
+            incrementBy: 1
+  - changeSet:
+      id: 00000000000004-shared-link
+      author: hidetora
+      changes:
+        - createTable:
+            tableName: shared_link
+            columns:
+              - column:
+                  name: id
+                  type: "${uuidType}"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: "${uuidType}"
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recipient_user_id
+                  type: "${uuidType}"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp with time zone
+                  defaultValue: "${now}"

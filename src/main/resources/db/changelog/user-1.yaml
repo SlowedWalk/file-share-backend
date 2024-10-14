@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00000000000001-user-seq
+      author: hidetora
+      changes:
+        - createSequence:
+           sequenceName: user_sequence
+           startValue: 1
+           incrementBy: 1
+  - changeSet:
+      id: 00000000000001-user
+      author: hidetora
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  type:  "${uuidType}"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: ux_user_email
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+              - column:
+                  name: public_key
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueDate: "${now}"
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueDate: "${now}"
+  - changeSet:
+      id: 00000000000001-authority
+      author: hidetora
+      changes:
+        - createTable:
+            tableName: authority
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createTable:
+            tableName: user_authority
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: authority_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: user_id, authority_name
+            tableName: user_authority
+
+        - addForeignKeyConstraint:
+            baseColumnNames: authority_name
+            baseTableName: user_authority
+            constraintName: fk_authority_name
+            referencedColumnNames: name
+            referencedTableName: authority
+
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_authority
+            constraintName: fk_user_id
+            referencedColumnNames: id
+            referencedTableName: app_user
+
+        - loadData:
+            file: db/data/authority.csv
+            separator: ;
+            tableName: authority
+            usePreparedStatements: true
+            columns:
+              - column:
+                  name: name
+                  type: string

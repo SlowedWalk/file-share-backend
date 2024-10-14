@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00000000000001-received-file-details-seq
+      author: hidetora
+      changes:
+        - createSequence:
+            sequenceName: received_file_details_sequence
+            startValue: 1
+            incrementBy: 1
+  - changeSet:
+      id: 00000000000005-received-file-details
+      author: hidetora
+      changes:
+        - createTable:
+            tableName: received-file-details
+            columns:
+              - column:
+                  name: id
+                  type: "${uuidType}"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: "${uuidType}"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recipient_email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueDate: "${now}"

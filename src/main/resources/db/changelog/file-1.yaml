@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00000000000001-file-seq
+      author: hidetora
+      changes:
+        - createSequence:
+            sequenceName: file_sequence
+            startValue: 1
+            incrementBy: 1
+  - changeSet:
+      id: 00000000000001-file
+      author: hidetora
+      changes:
+        - createTable:
+            tableName: file
+            columns:
+              - column:
+                  name: id
+                  type: "${uuidType}"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: "${uuidType}"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: encrypted_aes_key
+                  type: bytea
+                  constraints:
+                    nullable: false
+              - column:
+                  name: encrypted_file
+                  type: bytea
+                  constraints:
+                    nullable: false
+              - column:
+                  name: iv
+                  type: bytea
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueDate: "${now}"
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueDate: "${now}"
